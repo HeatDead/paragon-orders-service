@@ -9,6 +9,6 @@ import org.springframework.web.bind.annotation.RequestMethod;
 
 @FeignClient(value = "paragon-account-service", url = "http://localhost:8081/")
 public interface AccountServiceClient {
-    @RequestMapping(method = RequestMethod.POST, value = "/account")
+    @RequestMapping(method = RequestMethod.GET, value = "/account")
     Account getAccount(@RequestHeader HttpHeaders request);
 }
