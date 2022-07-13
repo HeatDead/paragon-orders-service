@@ -1,11 +1,9 @@
 package com.example.paragonordersservice.Objects;
 
-import lombok.Value;
+import lombok.Data;
 
-@Value
+@Data
 public class Car {
     Long id;
-    String name;
-    int year;
-    Double price;
+    boolean sold;
 }

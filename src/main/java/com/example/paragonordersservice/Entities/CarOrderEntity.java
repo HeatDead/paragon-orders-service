@@ -5,18 +5,19 @@ import lombok.Data;
 import lombok.NoArgsConstructor;
 
 import javax.persistence.*;
+import java.util.Date;
 
 @Data
 @NoArgsConstructor
 @AllArgsConstructor
 @Entity
-@Table(name = "cars")
-public class CarEntity {
+@Table(name = "cars_orders")
+public class CarOrderEntity {
     @Id
     @GeneratedValue(strategy = GenerationType.AUTO)
     private Long id;
 
-    private String name;
-    private int year;
-    private Double price;
+    private Long car_id;
+    private String user_id;
+    private Date order_date;
 }

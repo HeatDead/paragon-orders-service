@@ -3,8 +3,7 @@ package com.example.paragonordersservice.Requests;
 import lombok.Data;
 
 @Data
-public class CarRequest {
-    String name;
-    int year;
-    Double price;
+public class SoldRequest {
+    Long car_id;
+    String username;
 }
