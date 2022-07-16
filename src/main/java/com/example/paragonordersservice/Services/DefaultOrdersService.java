@@ -13,6 +13,7 @@ import com.example.paragonordersservice.Repositories.PartOrderRepository;
 import com.example.paragonordersservice.Repositories.RepairOrderRepository;
 import com.example.paragonordersservice.Requests.PartRequest;
 import com.example.paragonordersservice.Requests.PartsOrderRequest;
+import com.example.paragonordersservice.Requests.RepairOrderRequest;
 import com.example.paragonordersservice.Requests.SoldRequest;
 import lombok.RequiredArgsConstructor;
 import org.springframework.stereotype.Service;
@@ -61,9 +62,9 @@ public class DefaultOrdersService implements OrdersService {
     }
 
     @Override
-    public void makeRepairOrder(Long id, HttpHeaders request) {
+    public void makeRepairOrder(RepairOrderRequest repairOrderRequest, HttpHeaders request) {
         try {
-            Car car = mainServiceClient.getCarById(id);
+            Car car = mainServiceClient.getCarById(repairOrderRequest.getCar_id());
             Account account = accountServiceClient.getAccount(request);
 
             if(car == null || account == null)
@@ -72,7 +73,7 @@ public class DefaultOrdersService implements OrdersService {
             System.out.println("Making repair order: User: " + account.getUsername() + ", Car: " + car.getId());
 
             RepairOrderEntity repairOrderEntity = new RepairOrderEntity();
-            repairOrderEntity.setCar_id(id);
+            repairOrderEntity.setCar_id(repairOrderRequest.getCar_id());
             repairOrderEntity.setUser_id(account.getUsername());
             repairOrderEntity.setOrder_date(new Date());
             repairOrderRepository.save(repairOrderEntity);
@@ -85,25 +86,29 @@ public class DefaultOrdersService implements OrdersService {
 
     @Override
     public void makePartsOrder(PartsOrderRequest partsOrderRequest, HttpHeaders request) {
-        Account account = accountServiceClient.getAccount(request);
+        try {
+            Account account = accountServiceClient.getAccount(request);
 
-        if(account == null)
+            if(account == null)
+                return;
+
+            PartOrderEntity entity = new PartOrderEntity();
+            entity.setUser_id(account.getUsername());
+            entity.setOrder_date(new Date());
+
+            entity = partOrderRepository.save(entity);
+
+            double price = 0;
+            System.out.println(partsOrderRequest.getPartRequests());
+            for (PartRequest pq : partsOrderRequest.getPartRequests()){
+                price += stoServiceClient.getPartById(pq.getId()).getPrice() * pq.getCount();
+                stoServiceClient.orderPart(pq);
+            }
+
+            entity.setPrice(price);
+            partOrderRepository.save(entity);
+        }catch (Exception e){
             return;
-
-        PartOrderEntity entity = new PartOrderEntity();
-        entity.setUser_id(account.getUsername());
-        entity.setOrder_date(new Date());
-
-        entity = partOrderRepository.save(entity);
-
-        double price = 0;
-        for (PartRequest pq : partsOrderRequest.getPartRequests()){
-            price += pq.getPrice();
-            pq.setOrder(entity.getId());
-            stoServiceClient.addPart(pq);
         }
-
-        entity.setPrice(price);
-        partOrderRepository.save(entity);
     }
 }

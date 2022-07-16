@@ -2,6 +2,7 @@ package com.example.paragonordersservice.Controllers;
 
 import com.example.paragonordersservice.Objects.RepairOrder;
 import com.example.paragonordersservice.Requests.PartsOrderRequest;
+import com.example.paragonordersservice.Requests.RepairOrderRequest;
 import com.example.paragonordersservice.Services.OrdersService;
 import lombok.RequiredArgsConstructor;
 import org.springframework.http.HttpHeaders;
@@ -20,8 +21,8 @@ public class OrdersController {
     }
 
     @PostMapping("/repairOrder")
-    public void makeRepairOrder(@RequestParam Long car_id, @RequestHeader HttpHeaders request){
-        ordersService.makeRepairOrder(car_id, request);
+    public void makeRepairOrder(@RequestBody RepairOrderRequest repairOrderRequest, @RequestHeader HttpHeaders request){
+        ordersService.makeRepairOrder(repairOrderRequest, request);
     }
 
     @PostMapping("/partsOrder")

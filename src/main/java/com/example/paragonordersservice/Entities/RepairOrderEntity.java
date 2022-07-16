@@ -20,6 +20,8 @@ public class RepairOrderEntity {
     private Long car_id;
     private String user_id;
 
+    private String description;
+
     private Date order_date;
     private Date finish_date;
 

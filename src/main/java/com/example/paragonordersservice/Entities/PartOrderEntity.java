@@ -6,12 +6,13 @@ import lombok.NoArgsConstructor;
 
 import javax.persistence.*;
 import java.util.Date;
+import java.util.List;
 
 @Data
 @NoArgsConstructor
 @AllArgsConstructor
 @Entity
-@Table(name = "parts_types")
+@Table(name = "parts_orders")
 public class PartOrderEntity {
     @Id
     @GeneratedValue(strategy = GenerationType.AUTO)
