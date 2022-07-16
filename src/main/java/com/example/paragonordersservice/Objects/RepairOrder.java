@@ -7,6 +7,7 @@ import java.util.Date;
 @Value
 public class RepairOrder {
     Long id;
-    private Long car_id;
-    private Date order_date;
+    Long car_id;
+    Date order_date;
+    String result;
 }

@@ -11,21 +11,15 @@ import java.util.Date;
 @NoArgsConstructor
 @AllArgsConstructor
 @Entity
-@Table(name = "repairs_orders")
-public class RepairOrderEntity {
+@Table(name = "parts_types")
+public class PartOrderEntity {
     @Id
     @GeneratedValue(strategy = GenerationType.AUTO)
     private Long id;
 
-    private Long car_id;
     private String user_id;
 
     private Date order_date;
-    private Date finish_date;
-
-    private Long work_type;
-
-    private String result;
 
     private Double price;
 }
