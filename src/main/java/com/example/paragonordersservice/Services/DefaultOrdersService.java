@@ -6,10 +6,10 @@ import com.example.paragonordersservice.Clients.StoServiceClient;
 import com.example.paragonordersservice.Entities.CarOrderEntity;
 import com.example.paragonordersservice.Entities.PartOrderEntity;
 import com.example.paragonordersservice.Entities.RepairOrderEntity;
-import com.example.paragonordersservice.Objects.Account;
-import com.example.paragonordersservice.Objects.Car;
-import com.example.paragonordersservice.Objects.User;
-import com.example.paragonordersservice.Objects.Work;
+import com.example.paragonordersservice.Mappers.CarOrderToEntityMapper;
+import com.example.paragonordersservice.Mappers.PartOrderToEntityMapper;
+import com.example.paragonordersservice.Mappers.RepairOrderToEntityMapper;
+import com.example.paragonordersservice.Objects.*;
 import com.example.paragonordersservice.Repositories.CarOrderRepository;
 import com.example.paragonordersservice.Repositories.PartOrderRepository;
 import com.example.paragonordersservice.Repositories.RepairOrderRepository;
@@ -19,6 +19,7 @@ import org.springframework.stereotype.Service;
 
 import org.springframework.http.HttpHeaders;
 
+import java.util.ArrayList;
 import java.util.Date;
 import java.util.List;
 
@@ -32,6 +33,10 @@ public class DefaultOrdersService implements OrdersService {
     private final CarOrderRepository carOrderRepository;
     private final RepairOrderRepository repairOrderRepository;
     private final PartOrderRepository partOrderRepository;
+
+    private final PartOrderToEntityMapper partOrderToEntityMapper;
+    private final RepairOrderToEntityMapper repairOrderToEntityMapper;
+    private final CarOrderToEntityMapper carOrderToEntityMapper;
 
     @Override
     public void makeCarOrder(Long id, HttpHeaders request) {
@@ -62,12 +67,24 @@ public class DefaultOrdersService implements OrdersService {
     }
 
     @Override
+    public List<CarOrder> getCarOrders() {
+        Iterable<CarOrderEntity> iterable = carOrderRepository.findAll();
+
+        List<CarOrder> carOrders = new ArrayList<>();
+        for (CarOrderEntity entity : iterable){
+            carOrders.add(carOrderToEntityMapper.carOrderEntityToCarOrder(entity));
+        }
+
+        return carOrders;
+    }
+
+    @Override
     public void makeRepairOrder(RepairOrderRequest repairOrderRequest, HttpHeaders request) {
         try {
             Car car = mainServiceClient.getCarById(repairOrderRequest.getCar_id());
             Account account = accountServiceClient.getAccount(request);
 
-            //TO DO: проверка принадлежности авто
+            //TODO: проверка принадлежности авто
             if(car == null || account == null)
                 throw new Exception("Error when creating an order");
 
@@ -116,6 +133,24 @@ public class DefaultOrdersService implements OrdersService {
     }
 
     @Override
+    public List<RepairOrder> getRepairOrders(boolean state) {
+        Iterable<RepairOrderEntity> iterable = repairOrderRepository.findAll();
+
+        List<RepairOrder> repairOrders = new ArrayList<>();
+        for (RepairOrderEntity entity : iterable){
+            if(state)
+                if (entity.getFinish_date() == null)
+                    continue;
+            if(!state)
+                if (entity.getFinish_date() != null)
+                    continue;
+            repairOrders.add(repairOrderToEntityMapper.repairOrderEntityToRepairOrder(entity));
+        }
+
+        return repairOrders;
+    }
+
+    @Override
     public void makePartsOrder(PartsOrderRequest partsOrderRequest, HttpHeaders request) {
         try {
             Account account = accountServiceClient.getAccount(request);
@@ -139,5 +174,17 @@ public class DefaultOrdersService implements OrdersService {
         }catch (Exception e){
             System.out.println(e);
         }
+    }
+
+    @Override
+    public List<PartOrder> getPartOrders() {
+        Iterable<PartOrderEntity> iterable = partOrderRepository.findAll();
+
+        List<PartOrder> partOrders = new ArrayList<>();
+        for (PartOrderEntity entity : iterable){
+            partOrders.add(partOrderToEntityMapper.partOrderEntityToPartOrder(entity));
+        }
+
+        return partOrders;
     }
 }
