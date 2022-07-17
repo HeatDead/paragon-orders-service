@@ -67,17 +67,21 @@ public class DefaultOrdersService implements OrdersService {
             Car car = mainServiceClient.getCarById(repairOrderRequest.getCar_id());
             Account account = accountServiceClient.getAccount(request);
 
+            //TO DO: проверка принадлежности авто
             if(car == null || account == null)
                 throw new Exception("Error when creating an order");
 
             System.out.println("Making repair order: User: " + account.getUsername() + ", Car: " + car.getId());
 
             RepairOrderEntity repairOrderEntity = new RepairOrderEntity();
+
             repairOrderEntity.setCar_id(repairOrderRequest.getCar_id());
             repairOrderEntity.setUser_id(account.getUsername());
             repairOrderEntity.setOrder_date(new Date());
-            repairOrderRepository.save(repairOrderEntity);
+            repairOrderEntity.setDescription(repairOrderEntity.getDescription());
+            repairOrderEntity.setWork_type(repairOrderRequest.getWork_type());
 
+            repairOrderRepository.save(repairOrderEntity);
         }catch (Exception e)
         {
             System.out.println(e);
@@ -108,7 +112,7 @@ public class DefaultOrdersService implements OrdersService {
             entity.setPrice(price);
             partOrderRepository.save(entity);
         }catch (Exception e){
-            return;
+            System.out.println(e);
         }
     }
 }
