@@ -27,7 +27,7 @@ public class OrdersController {
 
     @GetMapping("/carOrders")
     public List<CarOrder> getCarOrders(){
-        return null;
+        return ordersService.getCarOrders();
     }
 
     @PostMapping("/repairOrder")
@@ -42,7 +42,12 @@ public class OrdersController {
 
     @GetMapping("/repairOrders")
     public List<RepairOrder> getRepairOrders(){
-        return null;
+        return ordersService.getRepairOrders(false);
+    }
+
+    @GetMapping("/finishedRepairOrders")
+    public List<RepairOrder> getFinishedRepairOrders(){
+        return ordersService.getRepairOrders(true);
     }
 
     @PostMapping("/partsOrder")
