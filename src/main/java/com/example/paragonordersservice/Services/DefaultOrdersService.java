@@ -78,7 +78,7 @@ public class DefaultOrdersService implements OrdersService {
             repairOrderEntity.setCar_id(repairOrderRequest.getCar_id());
             repairOrderEntity.setUser_id(account.getUsername());
             repairOrderEntity.setOrder_date(new Date());
-            repairOrderEntity.setDescription(repairOrderEntity.getDescription());
+            repairOrderEntity.setDescription(repairOrderRequest.getDescription());
             repairOrderEntity.setWork_type(repairOrderRequest.getWork_type());
 
             repairOrderRepository.save(repairOrderEntity);
