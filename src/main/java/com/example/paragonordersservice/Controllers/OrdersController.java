@@ -1,6 +1,7 @@
 package com.example.paragonordersservice.Controllers;
 
 import com.example.paragonordersservice.Objects.RepairOrder;
+import com.example.paragonordersservice.Requests.FinishRepairOrderRequest;
 import com.example.paragonordersservice.Requests.PartsOrderRequest;
 import com.example.paragonordersservice.Requests.RepairOrderRequest;
 import com.example.paragonordersservice.Services.OrdersService;
@@ -23,6 +24,11 @@ public class OrdersController {
     @PostMapping("/repairOrder")
     public void makeRepairOrder(@RequestBody RepairOrderRequest repairOrderRequest, @RequestHeader HttpHeaders request){
         ordersService.makeRepairOrder(repairOrderRequest, request);
+    }
+
+    @PostMapping("/finishRepairOrder")
+    public void finishRepairOrder(@RequestBody FinishRepairOrderRequest finishRepairOrderRequest){
+        ordersService.finishRepairOrder(finishRepairOrderRequest);
     }
 
     @PostMapping("/partsOrder")

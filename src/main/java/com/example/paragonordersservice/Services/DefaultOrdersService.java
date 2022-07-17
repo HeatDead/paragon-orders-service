@@ -8,19 +8,18 @@ import com.example.paragonordersservice.Entities.PartOrderEntity;
 import com.example.paragonordersservice.Entities.RepairOrderEntity;
 import com.example.paragonordersservice.Objects.Account;
 import com.example.paragonordersservice.Objects.Car;
+import com.example.paragonordersservice.Objects.Work;
 import com.example.paragonordersservice.Repositories.CarOrderRepository;
 import com.example.paragonordersservice.Repositories.PartOrderRepository;
 import com.example.paragonordersservice.Repositories.RepairOrderRepository;
-import com.example.paragonordersservice.Requests.PartRequest;
-import com.example.paragonordersservice.Requests.PartsOrderRequest;
-import com.example.paragonordersservice.Requests.RepairOrderRequest;
-import com.example.paragonordersservice.Requests.SoldRequest;
+import com.example.paragonordersservice.Requests.*;
 import lombok.RequiredArgsConstructor;
 import org.springframework.stereotype.Service;
 
 import org.springframework.http.HttpHeaders;
 
 import java.util.Date;
+import java.util.List;
 
 @Service
 @RequiredArgsConstructor
@@ -86,6 +85,24 @@ public class DefaultOrdersService implements OrdersService {
         {
             System.out.println(e);
         }
+    }
+
+    @Override
+    public void finishRepairOrder(FinishRepairOrderRequest finishRepairOrderRequest) {
+        RepairOrderEntity entity = repairOrderRepository.findById(finishRepairOrderRequest.getId()).get();
+
+        entity.setResult(finishRepairOrderRequest.getResult());
+        entity.setFinish_date(new Date());
+
+        List<Work> works = stoServiceClient.getWorksByOrderId(finishRepairOrderRequest.getId());
+
+        Double total_price = 0.0;
+        for(Work w : works)
+            total_price += w.getTotal_price();
+
+        entity.setPrice(total_price);
+
+        repairOrderRepository.save(entity);
     }
 
     @Override
