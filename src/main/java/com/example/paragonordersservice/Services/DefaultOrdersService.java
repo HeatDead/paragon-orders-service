@@ -8,6 +8,7 @@ import com.example.paragonordersservice.Entities.PartOrderEntity;
 import com.example.paragonordersservice.Entities.RepairOrderEntity;
 import com.example.paragonordersservice.Objects.Account;
 import com.example.paragonordersservice.Objects.Car;
+import com.example.paragonordersservice.Objects.User;
 import com.example.paragonordersservice.Objects.Work;
 import com.example.paragonordersservice.Repositories.CarOrderRepository;
 import com.example.paragonordersservice.Repositories.PartOrderRepository;
@@ -87,6 +88,15 @@ public class DefaultOrdersService implements OrdersService {
         }
     }
 
+    private HttpHeaders getHeader(){
+        HttpHeaders header = new HttpHeaders();
+        String s = accountServiceClient.getToken(new User("microservice", "microservice")).toString();
+        s = s.substring(7, s.length() - 1);
+        System.out.println(s);
+        header.add(HttpHeaders.AUTHORIZATION, "Bearer " + s);
+        return header;
+    }
+
     @Override
     public void finishRepairOrder(FinishRepairOrderRequest finishRepairOrderRequest) {
         RepairOrderEntity entity = repairOrderRepository.findById(finishRepairOrderRequest.getId()).get();
@@ -94,7 +104,7 @@ public class DefaultOrdersService implements OrdersService {
         entity.setResult(finishRepairOrderRequest.getResult());
         entity.setFinish_date(new Date());
 
-        List<Work> works = stoServiceClient.getWorksByOrderId(finishRepairOrderRequest.getId());
+        List<Work> works = stoServiceClient.getWorksByOrderId(getHeader(), finishRepairOrderRequest.getId());
 
         Double total_price = 0.0;
         for(Work w : works)
@@ -117,13 +127,11 @@ public class DefaultOrdersService implements OrdersService {
             entity.setUser_id(account.getUsername());
             entity.setOrder_date(new Date());
 
-            entity = partOrderRepository.save(entity);
-
             double price = 0;
             System.out.println(partsOrderRequest.getPartRequests());
             for (PartRequest pq : partsOrderRequest.getPartRequests()){
-                price += stoServiceClient.getPartById(pq.getId()).getPrice() * pq.getCount();
-                stoServiceClient.orderPart(pq);
+                price += stoServiceClient.getPartById(getHeader(), pq.getId()).getPrice() * pq.getCount();
+                stoServiceClient.orderPart(getHeader(), pq);
             }
 
             entity.setPrice(price);
