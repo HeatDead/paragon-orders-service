@@ -17,6 +17,6 @@ public interface StoServiceClient {
     @RequestMapping(method = RequestMethod.GET, value = "/parts/getPartById")
     Part getPartById(@RequestHeader HttpHeaders request, @RequestParam Long id);
 
-    @RequestMapping(method = RequestMethod.GET, value = "/works")
+    @RequestMapping(method = RequestMethod.GET, value = "/works/getWorksById")
     List<Work> getWorksByOrderId(@RequestHeader HttpHeaders request, @RequestParam Long order_id);
 }
