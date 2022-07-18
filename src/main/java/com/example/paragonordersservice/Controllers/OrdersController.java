@@ -46,7 +46,7 @@ public class OrdersController {
     }
 
     @GetMapping("/repairOrderById")
-    public List<RepairOrder> getRepairOrderById(@RequestParam Long id){
+    public RepairOrder getRepairOrderById(@RequestParam Long id){
         return getRepairOrderById(id);
     }
 
