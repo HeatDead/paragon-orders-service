@@ -45,6 +45,11 @@ public class OrdersController {
         return ordersService.getRepairOrders(false);
     }
 
+    @GetMapping("/repairOrderById")
+    public List<RepairOrder> getRepairOrderById(@RequestParam Long id){
+        return getRepairOrderById(id);
+    }
+
     @GetMapping("/finishedRepairOrders")
     public List<RepairOrder> getFinishedRepairOrders(){
         return ordersService.getRepairOrders(true);

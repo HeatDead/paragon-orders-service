@@ -16,6 +16,7 @@ public interface OrdersService {
     void makeRepairOrder(RepairOrderRequest repairOrderRequest, HttpHeaders request);
     void finishRepairOrder(FinishRepairOrderRequest finishRepairOrderRequest);
     List<RepairOrder> getRepairOrders(boolean state);
+    RepairOrder getRepairOrderById(Long id);
     void makePartsOrder(PartsOrderRequest partsOrderRequest, HttpHeaders request);
     List<PartOrder> getPartOrders();
 }

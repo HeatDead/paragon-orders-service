@@ -151,6 +151,11 @@ public class DefaultOrdersService implements OrdersService {
     }
 
     @Override
+    public RepairOrder getRepairOrderById(Long id) {
+        return repairOrderToEntityMapper.repairOrderEntityToRepairOrder(repairOrderRepository.findById(id).get());
+    }
+
+    @Override
     public void makePartsOrder(PartsOrderRequest partsOrderRequest, HttpHeaders request) {
         try {
             Account account = accountServiceClient.getAccount(request);
