@@ -15,8 +15,8 @@ public interface MainServiceClient {
     @RequestMapping(method = RequestMethod.GET, value = "/cars")
     List<Car> getAllCars();
 
-    @RequestMapping(method = RequestMethod.GET, value = "/cars/{carId}")
-    Car getCarById(@PathVariable("carId") Long carId);
+    @RequestMapping(method = RequestMethod.GET, value = "/cars/getCarById")
+    Car getCarById(@RequestParam Long id);
 
     @RequestMapping(method = RequestMethod.POST, value = "/cars/sold/")
     void soldCar(@RequestBody SoldRequest soldRequest);
