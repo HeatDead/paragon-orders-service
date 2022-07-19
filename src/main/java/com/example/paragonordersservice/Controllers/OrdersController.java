@@ -22,47 +22,47 @@ import java.util.List;
 public class OrdersController {
     private final OrdersService ordersService;
 
-    @PostMapping("/carOrder")
+    @RequestMapping(value = "/carOrder", method = RequestMethod.POST)
     public void makeCarOrder(@RequestParam Long car_id, @RequestHeader HttpHeaders request) throws IncorrectOrderException {
         ordersService.makeCarOrder(car_id, request);
     }
 
-    @GetMapping("/carOrders")
+    @RequestMapping(value = "/carOrders", method = RequestMethod.GET)
     public List<CarOrder> getCarOrders(){
         return ordersService.getCarOrders();
     }
 
-    @PostMapping("/repairOrder")
+    @RequestMapping(value = "/repairOrder", method = RequestMethod.POST)
     public void makeRepairOrder(@RequestBody RepairOrderRequest repairOrderRequest, @RequestHeader HttpHeaders request) throws IncorrectOrderException{
         ordersService.makeRepairOrder(repairOrderRequest, request);
     }
 
-    @PostMapping("/finishRepairOrder")
+    @RequestMapping(value = "/finishRepairOrder", method = RequestMethod.PUT)
     public void finishRepairOrder(@RequestBody FinishRepairOrderRequest finishRepairOrderRequest) throws ObjectNotFoundException {
         ordersService.finishRepairOrder(finishRepairOrderRequest);
     }
 
-    @GetMapping("/repairOrders")
+    @RequestMapping(value = "/repairOrders", method = RequestMethod.GET)
     public List<RepairOrder> getRepairOrders(){
         return ordersService.getRepairOrders(false);
     }
 
-    @GetMapping("/repairOrderById")
+    @RequestMapping(value = "/repairOrderById", method = RequestMethod.GET)
     public RepairOrder getRepairOrderById(@RequestParam Long id) throws ObjectNotFoundException{
         return ordersService.getRepairOrderById(id);
     }
 
-    @GetMapping("/finishedRepairOrders")
+    @RequestMapping(value = "/finishedRepairOrders", method = RequestMethod.GET)
     public List<RepairOrder> getFinishedRepairOrders(){
         return ordersService.getRepairOrders(true);
     }
 
-    @PostMapping("/partsOrder")
+    @RequestMapping(value = "/partsOrder", method = RequestMethod.POST)
     public void makePartsOrder(@RequestBody PartsOrderRequest partsOrderRequest, @RequestHeader HttpHeaders request) throws ObjectNotFoundException{
         ordersService.makePartsOrder(partsOrderRequest, request);
     }
 
-    @GetMapping("/partOrders")
+    @RequestMapping(value = "/partOrders", method = RequestMethod.GET)
     public List<PartOrder> getPartOrders(){
         return ordersService.getPartOrders();
     }
