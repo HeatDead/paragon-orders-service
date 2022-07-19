@@ -79,37 +79,45 @@ public class AuthorizationFilter extends OncePerRequestFilter {
         else if (!checkAuthorization(authHeader)) {
             System.out.println("SC_FORBIDDEN");
             response.setStatus(HttpServletResponse.SC_FORBIDDEN);
-        } else {
-            String token = authHeader.substring(7);
-            if(adminFilter(request)) {
-                System.out.println("ADMIN REQUEST");
-                if (tokenService.checkRole(token).equals("ADMIN"))
-                    filterChain.doFilter(request, response);
-                //response.setStatus(HttpServletResponse.SC_FORBIDDEN);
-            }
-            if(moderatorFilter(request)) {
-                System.out.println("MODERATOR REQUEST");
-                if (tokenService.checkRole(token).equals("MODERATOR"))
-                    filterChain.doFilter(request, response);
-            }
-            if (workerFilter(request)) {
-                System.out.println("WORKER REQUEST");
-                if (tokenService.checkRole(token).equals("WORKER"))
-                    filterChain.doFilter(request, response);
-            }
-            if (microserviceFilter(request)) {
-                System.out.println("MICROSERVICE REQUEST");
-                if (tokenService.checkRole(token).equals("MICROSERVICE"))
-                    filterChain.doFilter(request, response);
-            }
-
-            if (!microserviceFilter(request) && !workerFilter(request) && !moderatorFilter(request) && !adminFilter(request)) {
-                filterChain.doFilter(request, response);
-                return;
-            }
-
-            response.setStatus(HttpServletResponse.SC_FORBIDDEN);
         }
+        else {
+                String token = authHeader.substring(7);
+                if(adminFilter(request)) {
+                    System.out.println("ADMIN REQUEST");
+                    if (tokenService.checkRole(token).equals("ADMIN")) {
+                        filterChain.doFilter(request, response);
+                        return;
+                    }
+                }
+                if(moderatorFilter(request)) {
+                    System.out.println("MODERATOR REQUEST");
+                    if (tokenService.checkRole(token).equals("MODERATOR")) {
+                        filterChain.doFilter(request, response);
+                        return;
+                    }
+                }
+                if (workerFilter(request)) {
+                    System.out.println("WORKER REQUEST");
+                    if (tokenService.checkRole(token).equals("WORKER")) {
+                        filterChain.doFilter(request, response);
+                        return;
+                    }
+                }
+                if (microserviceFilter(request)) {
+                    System.out.println("MICROSERVICE REQUEST");
+                    if (tokenService.checkRole(token).equals("MICROSERVICE")) {
+                        filterChain.doFilter(request, response);
+                        return;
+                    }
+                }
+
+                if (!microserviceFilter(request) && !workerFilter(request) && !moderatorFilter(request) && !adminFilter(request)) {
+                    filterChain.doFilter(request, response);
+                    return;
+                }
+
+                response.setStatus(HttpServletResponse.SC_FORBIDDEN);
+            }
     }
 
     private boolean checkAuthorization(String auth) {
