@@ -19,5 +19,5 @@ public interface MainServiceClient {
     Car getCarById(@RequestParam Long id);
 
     @RequestMapping(method = RequestMethod.POST, value = "/cars/sold/")
-    void soldCar(@RequestBody SoldRequest soldRequest);
+    void soldCar(@RequestHeader HttpHeaders request, @RequestBody SoldRequest soldRequest);
 }

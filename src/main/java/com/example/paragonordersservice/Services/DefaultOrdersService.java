@@ -53,7 +53,7 @@ public class DefaultOrdersService implements OrdersService {
             soldRequest.setUsername(account.getUsername());
             soldRequest.setCar_id(id);
 
-            mainServiceClient.soldCar(soldRequest);
+            mainServiceClient.soldCar(getHeader(), soldRequest);
             CarOrderEntity carOrderEntity = new CarOrderEntity();
             carOrderEntity.setCar_id(id);
             carOrderEntity.setUser_id(account.getUsername());
