@@ -8,6 +8,7 @@ import java.util.Date;
 public class RepairOrder {
     Long id;
     Long car_id;
+    String user_id;
     Date order_date;
     String result;
 }
