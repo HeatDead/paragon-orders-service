@@ -1,14 +1,14 @@
 package com.example.paragonordersservice.Clients;
 
 import com.example.paragonordersservice.Objects.Account;
+import com.example.paragonordersservice.Objects.Car;
 import com.example.paragonordersservice.Objects.User;
 import com.example.paragonordersservice.Responses.TokenResponse;
 import org.springframework.cloud.openfeign.FeignClient;
 import org.springframework.http.HttpHeaders;
-import org.springframework.web.bind.annotation.RequestBody;
-import org.springframework.web.bind.annotation.RequestHeader;
-import org.springframework.web.bind.annotation.RequestMapping;
-import org.springframework.web.bind.annotation.RequestMethod;
+import org.springframework.web.bind.annotation.*;
+
+import java.util.List;
 
 @FeignClient(value = "paragon-account-service", url = "http://localhost:8081/")
 public interface AccountServiceClient {
@@ -19,5 +19,8 @@ public interface AccountServiceClient {
     Object getToken(@RequestBody User user);
 
     @RequestMapping(method = RequestMethod.GET, value = "/account/cars")
-    Object getUserCars(@RequestHeader HttpHeaders request);
+    List<Car> getUserCars(@RequestHeader HttpHeaders request);
+
+    @RequestMapping(method = RequestMethod.GET, value = "/account/checkCar")
+    boolean belongCarToUser(@RequestParam Long id, @RequestHeader HttpHeaders request);
 }

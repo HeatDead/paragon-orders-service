@@ -80,18 +80,13 @@ public class DefaultOrdersService implements OrdersService {
         if(car == null || account == null || repairOrderRequest == null)
             throw new IncorrectOrderException("Ошибка при создании заказа");
 
-        List<Car> userCars = (List<Car>) accountServiceClient.getUserCars(request);
-
-        if(!userCars.contains(car))
+        if(!accountServiceClient.belongCarToUser(repairOrderRequest.getCar_id(), request))
             throw new IncorrectOrderException("Вам не пренадлежит этот автомобиль");
 
         if(repairOrderRequest.getWork_type() == 0 || repairOrderRequest.getDescription().equals("") || repairOrderRequest.getCar_id() == null)
             throw new IncorrectOrderException("Ошибка при создании заказа");
 
         RepairOrderEntity repairOrderEntity = new RepairOrderEntity();
-
-        if(repairOrderEntity.getFinish_date() == null)
-            throw new IncorrectOrderException("Заказ уже выполнен");
 
         repairOrderEntity.setCar_id(repairOrderRequest.getCar_id());
         repairOrderEntity.setUser_id(account.getUsername());
