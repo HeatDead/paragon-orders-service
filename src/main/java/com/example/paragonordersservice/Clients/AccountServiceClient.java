@@ -17,4 +17,7 @@ public interface AccountServiceClient {
 
     @RequestMapping(method = RequestMethod.POST, value = "/auth/token")
     Object getToken(@RequestBody User user);
+
+    @RequestMapping(method = RequestMethod.GET, value = "/account/cars")
+    Object getUserCars(@RequestHeader HttpHeaders request);
 }

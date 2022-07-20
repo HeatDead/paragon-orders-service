@@ -38,7 +38,7 @@ public class OrdersController {
     }
 
     @RequestMapping(value = "/finishRepairOrder", method = RequestMethod.PUT)
-    public void finishRepairOrder(@RequestBody FinishRepairOrderRequest finishRepairOrderRequest) throws ObjectNotFoundException {
+    public void finishRepairOrder(@RequestBody FinishRepairOrderRequest finishRepairOrderRequest) throws ObjectNotFoundException, IncorrectOrderException, Exception {
         ordersService.finishRepairOrder(finishRepairOrderRequest);
     }
 

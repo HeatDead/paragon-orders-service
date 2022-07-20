@@ -46,7 +46,7 @@ public class DefaultOrdersService implements OrdersService {
         Account account = accountServiceClient.getAccount(request);
 
         if(car == null || account == null || car.isSold())
-            throw new IncorrectOrderException("Error when creating an order");
+            throw new IncorrectOrderException("Ошибка при создании заказа");
 
         SoldRequest soldRequest = new SoldRequest();
         soldRequest.setUsername(account.getUsername());
@@ -77,13 +77,21 @@ public class DefaultOrdersService implements OrdersService {
         Car car = mainServiceClient.getCarById(repairOrderRequest.getCar_id());
         Account account = accountServiceClient.getAccount(request);
 
-        //TODO: проверка принадлежности авто
-        if(car == null || account == null)
-            throw new IncorrectOrderException("Error when creating an order");
+        if(car == null || account == null || repairOrderRequest == null)
+            throw new IncorrectOrderException("Ошибка при создании заказа");
 
-        System.out.println("Making repair order: User: " + account.getUsername() + ", Car: " + car.getId());
+        List<Car> userCars = (List<Car>) accountServiceClient.getUserCars(request);
+
+        if(!userCars.contains(car))
+            throw new IncorrectOrderException("Вам не пренадлежит этот автомобиль");
+
+        if(repairOrderRequest.getWork_type() == 0 || repairOrderRequest.getDescription().equals("") || repairOrderRequest.getCar_id() == null)
+            throw new IncorrectOrderException("Ошибка при создании заказа");
 
         RepairOrderEntity repairOrderEntity = new RepairOrderEntity();
+
+        if(repairOrderEntity.getFinish_date() == null)
+            throw new IncorrectOrderException("Заказ уже выполнен");
 
         repairOrderEntity.setCar_id(repairOrderRequest.getCar_id());
         repairOrderEntity.setUser_id(account.getUsername());
@@ -104,9 +112,15 @@ public class DefaultOrdersService implements OrdersService {
     }
 
     @Override
-    public void finishRepairOrder(FinishRepairOrderRequest finishRepairOrderRequest) throws ObjectNotFoundException {
+    public void finishRepairOrder(FinishRepairOrderRequest finishRepairOrderRequest) throws ObjectNotFoundException, IncorrectOrderException {
+        if(finishRepairOrderRequest.getResult().equals(""))
+            throw new IllegalArgumentException("Результат заказа не может быть пустым");
+
         RepairOrderEntity entity = repairOrderRepository.findById(finishRepairOrderRequest.getId())
-                .orElseThrow(()-> new ObjectNotFoundException("Repair order with this id not found"));
+                .orElseThrow(()-> new ObjectNotFoundException("Заказ ремонта с этим id не найден"));
+
+        if(entity.getFinish_date() != null)
+            throw new IncorrectOrderException("Заказ уже завершен");
 
         entity.setResult(finishRepairOrderRequest.getResult());
         entity.setFinish_date(new Date());
@@ -143,13 +157,13 @@ public class DefaultOrdersService implements OrdersService {
     @Override
     public RepairOrder getRepairOrderById(Long id) throws ObjectNotFoundException {
         return repairOrderToEntityMapper.repairOrderEntityToRepairOrder(repairOrderRepository.findById(id)
-                .orElseThrow(()-> new ObjectNotFoundException("Repair order with this id not found")));
+                .orElseThrow(()-> new ObjectNotFoundException("Заказ ремонта с этим id не найден")));
     }
 
     @Override
     public void makePartsOrder(PartsOrderRequest partsOrderRequest, HttpHeaders request) throws ObjectNotFoundException {
         Account account = accountServiceClient.getAccount(request);
-        if(account == null) throw new ObjectNotFoundException("Account not found");
+        if(account == null) throw new ObjectNotFoundException("Аккаунт не найден");
 
         PartOrderEntity entity = new PartOrderEntity();
         entity.setUser_id(account.getUsername());

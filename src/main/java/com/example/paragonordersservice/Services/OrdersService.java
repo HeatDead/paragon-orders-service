@@ -16,7 +16,7 @@ public interface OrdersService {
     void makeCarOrder(Long id, HttpHeaders request) throws IncorrectOrderException;
     List<CarOrder> getCarOrders();
     void makeRepairOrder(RepairOrderRequest repairOrderRequest, HttpHeaders request) throws IncorrectOrderException;
-    void finishRepairOrder(FinishRepairOrderRequest finishRepairOrderRequest) throws ObjectNotFoundException;
+    void finishRepairOrder(FinishRepairOrderRequest finishRepairOrderRequest) throws ObjectNotFoundException, Exception, IncorrectOrderException;
     List<RepairOrder> getRepairOrders(boolean state);
     RepairOrder getRepairOrderById(Long id) throws ObjectNotFoundException;
     void makePartsOrder(PartsOrderRequest partsOrderRequest, HttpHeaders request) throws ObjectNotFoundException;

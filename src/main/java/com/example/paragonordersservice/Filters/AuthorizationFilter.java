@@ -32,7 +32,7 @@ public class AuthorizationFilter extends OncePerRequestFilter {
     private static final List<String> ADMIN_WHITELIST = Arrays.asList("/orders/carOrders", "/orders/partOrders");
     private static final List<String> MODERATOR_WHITELIST = Arrays.asList("/orders/carOrders", "/orders/partOrders");
     private static final List<String> WORKER_WHITELIST = Arrays.asList("/orders/finishRepairOrder", "/orders/repairOrders",
-            "/orders/finishedRepairOrders", "/orders/repairOrderById", "/orders/partOrders");
+            "/orders/finishedRepairOrders", "/orders/partOrders");
     private static final List<String> MSERVICE_WHITELIST = Arrays.asList("/orders/repairOrders",
             "/orders/finishedRepairOrders");
 
