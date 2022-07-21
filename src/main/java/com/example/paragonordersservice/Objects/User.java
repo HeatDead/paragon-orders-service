@@ -1,6 +1,5 @@
 package com.example.paragonordersservice.Objects;
 
-import lombok.Data;
 import lombok.Value;
 
 @Value

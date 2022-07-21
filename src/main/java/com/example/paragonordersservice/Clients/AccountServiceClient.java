@@ -3,7 +3,6 @@ package com.example.paragonordersservice.Clients;
 import com.example.paragonordersservice.Objects.Account;
 import com.example.paragonordersservice.Objects.Car;
 import com.example.paragonordersservice.Objects.User;
-import com.example.paragonordersservice.Responses.TokenResponse;
 import org.springframework.cloud.openfeign.FeignClient;
 import org.springframework.http.HttpHeaders;
 import org.springframework.web.bind.annotation.*;

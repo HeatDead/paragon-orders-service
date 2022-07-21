@@ -1,6 +1,5 @@
 package com.example.paragonordersservice.Clients;
 
-import com.example.paragonordersservice.Objects.Account;
 import com.example.paragonordersservice.Objects.Car;
 import com.example.paragonordersservice.Requests.SoldRequest;
 import org.springframework.cloud.openfeign.FeignClient;
