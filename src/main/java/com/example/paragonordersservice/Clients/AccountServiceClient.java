@@ -9,7 +9,7 @@ import org.springframework.web.bind.annotation.*;
 
 import java.util.List;
 
-@FeignClient(value = "paragon-account-service", url = "http://localhost:8081/")
+@FeignClient(value = "paragon-account-service", url = "http://accountService:8081/")
 public interface AccountServiceClient {
     @RequestMapping(method = RequestMethod.GET, value = "/account")
     Account getAccount(@RequestHeader HttpHeaders request);

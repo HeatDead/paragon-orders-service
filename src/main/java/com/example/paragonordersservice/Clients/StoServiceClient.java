@@ -9,7 +9,7 @@ import org.springframework.web.bind.annotation.*;
 
 import java.util.List;
 
-@FeignClient(value = "paragon-sto-service", url = "http://localhost:8083/")
+@FeignClient(value = "paragon-sto-service", url = "http://stoService:8083/")
 public interface StoServiceClient {
     @RequestMapping(method = RequestMethod.POST, value = "/parts/order")
     void orderPart(@RequestHeader HttpHeaders request, @RequestBody PartRequest partRequest);
